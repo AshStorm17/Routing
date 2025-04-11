@@ -13,8 +13,6 @@ extern int TRACE;
 extern int YES;
 extern int NO;
 
-int connectcosts1[4] = {1, 0, 1, 999};
-
 struct distance_table
 {
     int costs[4][4];
@@ -132,4 +130,65 @@ linkhandler1(linkid, newcost) int linkid, newcost;
 /* constant definition in prog3.c from 0 to 1 */
 
 {
+    int oldcost = dt1.costs[linkid][linkid];
+    if (oldcost == newcost) return; // No change
+
+    // Update the cost to the neighbor itself
+    dt1.costs[linkid][linkid] = newcost;
+
+    // Recalculate costs to all destinations via this neighbor
+    int updated = 0;
+    for (int i = 0; i < 4; i++)
+    {
+        // Calculate the new cost to reach node i through the neighbor
+        int new_cost = newcost + dt1.costs[linkid][i];
+
+        // If the new cost is less than the current cost, update it
+        if (new_cost < dt1.costs[linkid][i])
+        {
+            dt1.costs[linkid][i] = new_cost;
+            updated = 1;
+        }
+ 
+        // If this link was previously the best, and cost increased,
+        // we may now need to recompute the minimum cost for that node
+        if (oldcost + dt1.costs[linkid][i] == dt1.costs[0][i] && new_cost > dt1.costs[0][i]) {
+            // Recompute min cost for destination i
+            int min = MAXCOST;
+            for (int j = 0; j < 4; j++) {
+                if (dt1.costs[j][i] < min) {
+                    min = dt1.costs[j][i];
+                }
+            }
+            dt1.costs[0][i] = min;
+            updated = 1;
+        }
+    }
+    
+    if (updated)
+    {
+        // Send updated costs to neighbors
+        struct rtpkt pkt;
+        pkt.sourceid = 1;
+
+        for (int i = 0; i < 4; i++)
+        {
+            int min = MAXCOST;
+            for (int j = 0; j < 4; j++)
+            {
+                if (dt1.costs[i][j] < min)
+                {
+                    min = dt1.costs[i][j];
+                }
+            }
+            pkt.mincost[i] = min;
+        }
+
+        // Send to neighbors: 0, 2
+        pkt.destid = 0;
+        tolayer2(pkt);
+
+        pkt.destid = 2;
+        tolayer2(pkt);
+    }
 }

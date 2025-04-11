@@ -142,4 +142,59 @@ linkhandler0(linkid, newcost) int linkid, newcost;
 /* constant definition in prog3.c from 0 to 1 */
 
 {
+    int oldcost = dt0.costs[linkid][linkid];
+    if (oldcost == newcost) return; // No change
+
+    // Update the cost to the neighbor itself
+    dt0.costs[linkid][linkid] = newcost;
+
+    // Recalculate costs to all destinations via this neighbor
+    int updated = 0;
+    for (int i = 0; i < 4; i++) {
+        int new_path_cost = newcost + dt0.costs[linkid][i];
+        if (new_path_cost < dt0.costs[0][i]) {
+            dt0.costs[0][i] = new_path_cost;
+            updated = 1;
+        }
+
+        // If this link was previously the best, and cost increased,
+        // we may now need to recompute the minimum cost for that node
+        if (oldcost + dt0.costs[linkid][i] == dt0.costs[0][i] && new_path_cost > dt0.costs[0][i]) {
+            // Recompute min cost for destination i
+            int min = MAXCOST;
+            for (int j = 0; j < 4; j++) {
+                if (dt0.costs[j][i] < min) {
+                    min = dt0.costs[j][i];
+                }
+            }
+            dt0.costs[0][i] = min;
+            updated = 1;
+        }
+    }
+
+    if (updated) {
+        // Send updated costs to neighbors
+        struct rtpkt pkt;
+        pkt.sourceid = 0;
+
+        for (int i = 0; i < 4; i++) {
+            int min = MAXCOST;
+            for (int j = 0; j < 4; j++) {
+                if (dt0.costs[j][i] < min) {
+                    min = dt0.costs[j][i];
+                }
+            }
+            pkt.mincost[i] = min;
+        }
+
+        // Send to neighbors: 1, 2, 3
+        pkt.destid = 1;
+        tolayer2(pkt);
+
+        pkt.destid = 2;
+        tolayer2(pkt);
+
+        pkt.destid = 3;
+        tolayer2(pkt);
+    }
 }
