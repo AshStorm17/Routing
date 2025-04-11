@@ -70,9 +70,9 @@ void rtupdate2(rcvdpkt) struct rtpkt *rcvdpkt;
     // Get the direct link cost to the source
     int direct_link_cost;
     switch (src) {
-        case 0: direct_link_cost = 0; break;
+        case 0: direct_link_cost = 3; break;
         case 1: direct_link_cost = 1; break;
-        case 3: direct_link_cost = 3; break;
+        case 3: direct_link_cost = 2; break;
         default: return; // Not a direct neighbor, ignore
     }
 
@@ -85,7 +85,7 @@ void rtupdate2(rcvdpkt) struct rtpkt *rcvdpkt;
         // If the new cost is less than the current cost, update it
         if (new_cost < dt2.costs[src][i])
         {
-            dt2.costs[0][i] = new_cost;
+            dt2.costs[src][i] = new_cost;
             updated = 1;
         }
     }
@@ -101,9 +101,9 @@ void rtupdate2(rcvdpkt) struct rtpkt *rcvdpkt;
             int min = MAXCOST;
             for (int j = 0; j < 4; j++)
             {
-                if (dt2.costs[i][j] < min)
+                if (dt2.costs[j][i] < min)
                 {
-                    min = dt2.costs[i][j];
+                    min = dt2.costs[j][i];
                 }
             }
             pkt.mincost[i] = min;

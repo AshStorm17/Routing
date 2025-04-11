@@ -79,7 +79,7 @@ rtupdate1(rcvdpkt) struct rtpkt *rcvdpkt;
         // If the new cost is less than the current cost, update it
         if (new_cost < dt1.costs[src][i])
         {
-            dt1.costs[0][i] = new_cost;
+            dt1.costs[src][i] = new_cost;
             updated = 1;
         }
     }
@@ -95,9 +95,9 @@ rtupdate1(rcvdpkt) struct rtpkt *rcvdpkt;
             int min = MAXCOST;
             for (int j = 0; j < 4; j++)
             {
-                if (dt1.costs[i][j] < min)
+                if (dt1.costs[j][i] < min)
                 {
-                    min = dt1.costs[i][j];
+                    min = dt1.costs[j][i];
                 }
             }
             pkt.mincost[i] = min;

@@ -30,7 +30,7 @@ void rtinit3()
 
     // Set direct link costs
     dt3.costs[0][0] = 7;
-    dt3.costs[2][2] = 3;
+    dt3.costs[2][2] = 2;
     dt3.costs[3][3] = 0;
 
     struct rtpkt pkt;
@@ -67,7 +67,7 @@ void rtupdate3(rcvdpkt) struct rtpkt *rcvdpkt;
     int direct_link_cost;
     switch (src) {
         case 0: direct_link_cost = 7; break;
-        case 2: direct_link_cost = 3; break;
+        case 2: direct_link_cost = 2; break;
         default: return; // Not a direct neighbor, ignore
     }
 
@@ -80,7 +80,7 @@ void rtupdate3(rcvdpkt) struct rtpkt *rcvdpkt;
         // If the new cost is less than the current cost, update it
         if (new_cost < dt3.costs[src][i])
         {
-            dt3.costs[0][i] = new_cost;
+            dt3.costs[src][i] = new_cost;
             updated = 1;
         }
     }
@@ -96,9 +96,9 @@ void rtupdate3(rcvdpkt) struct rtpkt *rcvdpkt;
             int min = MAXCOST;
             for (int j = 0; j < 4; j++)
             {
-                if (dt3.costs[i][j] < min)
+                if (dt3.costs[j][i] < min)
                 {
-                    min = dt3.costs[i][j];
+                    min = dt3.costs[j][i];
                 }
             }
             pkt.mincost[i] = min;
