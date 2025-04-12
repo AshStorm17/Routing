@@ -31,10 +31,16 @@ class LoopTopo(Topo):
         s3 = self.addSwitch('s3', cls=LinuxBridge)
         s4 = self.addSwitch('s4', cls=LinuxBridge)
 
-        # Create hosts with correct IPs
-        hosts = []
-        for i in range(1,9):
-            hosts.append(self.addHost(f'h{i}', ip=f'10.0.0.{i+1}/24'))
+
+        # Create hosts with specified IPs
+        h1 = self.addHost('h1', ip='10.0.0.2/24')
+        h2 = self.addHost('h2', ip='10.0.0.3/24')
+        h3 = self.addHost('h3', ip='10.0.0.4/24')
+        h4 = self.addHost('h4', ip='10.0.0.5/24')
+        h5 = self.addHost('h5', ip='10.0.0.6/24')
+        h6 = self.addHost('h6', ip='10.0.0.7/24')
+        h7 = self.addHost('h7', ip='10.0.0.8/24')
+        h8 = self.addHost('h8', ip='10.0.0.9/24')
 
         # Add switch links with 7ms delay
         self.addLink('s1', 's2', cls=TCLink, delay='7ms')
@@ -79,8 +85,8 @@ def run_tests(net):
                 print("Ping results inconclusive")
                 
             if i < 2:
-                print("Waiting 60 seconds...")
-                time.sleep(60)
+                print("Waiting 30 seconds...")
+                time.sleep(30)
 
 def verify_stp(net):
     print("\n=== STP Status ===")
@@ -104,7 +110,5 @@ if __name__ == '__main__':
     verify_stp(net)
     
     run_tests(net)
-    
-    CLI(net)
 
     net.stop()
