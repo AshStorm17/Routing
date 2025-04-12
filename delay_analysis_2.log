@@ -1,0 +1,37 @@
+Testing h5 -> h7
+
+Attempt 1 Output:
+PING 10.0.0.8 (10.0.0.8) 56(84) bytes of data.
+64 bytes from 10.0.0.8: icmp_seq=1 ttl=64 time=97.2 ms
+64 bytes from 10.0.0.8: icmp_seq=2 ttl=64 time=48.6 ms
+64 bytes from 10.0.0.8: icmp_seq=3 ttl=64 time=51.2 ms
+
+--- 10.0.0.8 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2003ms
+rtt min/avg/max/mdev = 48.625/65.662/97.190/22.317 ms
+
+Average delay: 65.662 ms
+
+Attempt 2 Output:
+PING 10.0.0.8 (10.0.0.8) 56(84) bytes of data.
+64 bytes from 10.0.0.8: icmp_seq=1 ttl=64 time=49.1 ms
+64 bytes from 10.0.0.8: icmp_seq=2 ttl=64 time=48.9 ms
+64 bytes from 10.0.0.8: icmp_seq=3 ttl=64 time=50.6 ms
+
+--- 10.0.0.8 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2004ms
+rtt min/avg/max/mdev = 48.939/49.568/50.616/0.745 ms
+
+Average delay: 49.568 ms
+
+Attempt 3 Output:
+PING 10.0.0.8 (10.0.0.8) 56(84) bytes of data.
+64 bytes from 10.0.0.8: icmp_seq=1 ttl=64 time=49.4 ms
+64 bytes from 10.0.0.8: icmp_seq=2 ttl=64 time=48.7 ms
+64 bytes from 10.0.0.8: icmp_seq=3 ttl=64 time=50.1 ms
+
+--- 10.0.0.8 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2004ms
+rtt min/avg/max/mdev = 48.733/49.408/50.054/0.539 ms
+
+Average delay: 49.408 ms
