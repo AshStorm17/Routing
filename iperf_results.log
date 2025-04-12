@@ -1,0 +1,10 @@
+*** Starting iperf3 test results:
+*** h6 -> h1 iperf result:
+iperf3: error - unable to send control message: Bad file descriptor
+
+*** h2 -> h8 iperf result:
+iperf3: error - unable to send control message: Bad file descriptor
+
+*** h3 -> h2 iperf result:
+iperf3: error - unable to send control message: Bad file descriptor
+
